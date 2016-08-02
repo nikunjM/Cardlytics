@@ -1,0 +1,28 @@
+Assume a database with the following structure
+
+Customers
+
+ID NAME ADDRESS PHONE NUMBER EMAIL
+
+Orders
+
+ID CUSTOMER_ID ORDER_AMOUNT ORDER_ADDRESS
+
+1. Write a SQL Query to pull all customers----
+select * from Customers;
+
+2. Write a SQL Query to pull all customers that have orders (no duplicates)----
+select * from Customers where ID in(select Distinct CUSTOMER_ID from Orders); 
+
+3. Write a SQL Query to pull all customers that do not have orders----
+select * from Customers where ID not in(select Distinct CUSTOMER_ID from Orders); 
+
+4. If you had to create an index on these tables, which fields would you most likely index and why?----
+ID from Customers table as it is Primary Key for this table and Foreign Key for Orders table which makes it best to be chosen as index field to retrieve records fast and efficiently.
+
+5. Write a query that lists each customer name, email, and the number of order they have----
+select cust.NAME,cust.EMAIL,res.no_of_order from Customers as cust,(select cust.ID,count(ord.ID) as no_of_order from Customers as cust,Orders as ord where cust.ID=ord.CUSTOMER_ID group by cust.ID) as res where cust.ID=res.ID;
+
+6. Write a query that pulls all customers that have between 2 and 5 orders----
+
+select cust.NAME,cust.EMAIL,res.no_of_order from Customers as cust,(select cust.ID,count(ord.ID) as no_of_order from Customers as cust,Orders as ord where cust.ID=ord.CUSTOMER_ID group by cust.ID having no_of_order Between 2 and 5) as res where cust.ID=res.ID;
